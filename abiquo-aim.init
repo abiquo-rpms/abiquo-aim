@@ -1,0 +1,56 @@
+#!/bin/sh
+#
+# chkconfig: 2345 99 99
+# description: Starts the required Abiquo AIM daemons
+#
+# Source function library.
+. /etc/init.d/functions
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+RETVAL=0
+
+start()
+{
+
+  status libvirtd
+  RETVAL=$?
+
+  if [ $RETVAL -ne 0 ]; then
+    echo -n $"Starting libvirtd daemon: "
+    /etc/init.d/libvirtd start
+  fi
+  
+  echo -n $"Starting AIM daemon: "
+  /usr/sbin/abiquo-aim --config-file /etc/abiquo-aim.ini -d
+
+  success
+  echo
+}
+
+stop()
+{
+  /etc/init.d/libvirtd stop
+  success
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    stop
+    start
+    ;;
+  status)
+    status openwsmand
+    RETVAL=$?
+    ;;
+  *)
+    echo $"Usage: $0 {start|stop|restart|status}"
+    exit 1
+esac
+exit $RETVAL
