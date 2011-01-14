@@ -2,7 +2,7 @@ Name:           abiquo-aim
 BuildRequires:  hiredis gcc-c++ thrift-cpp-devel boost-devel curl-devel libvirt-devel 
 Requires:	libvirt hiredis boost
 Version:        1.7.0
-Release:        5.rel1.1.2
+Release:        6.rel1.1.2
 Url:            http://www.abiquo.com/
 License:        BSD(or similar)
 Group:          System/Management
@@ -52,7 +52,10 @@ if ! [ -d /opt/vm_repository ]; then
 fi
 
 %changelog
-* Fry Jan 14 2011 Sergio Rubio <srubio@abiquo.com> - 1.7.0-5.rel1.1.2
+* Fri Jan 14 2011 Sergio Rubio <srubio@abiquo.com> - 1.7.0-6.rel1.1.2
+- fixed changelog typo 
+
+* Fri Jan 14 2011 Sergio Rubio <srubio@abiquo.com> - 1.7.0-5.rel1.1.2
 - updated to upstream 1.1.2
 
 * Thu Jan 13 2011 Sergio Rubio <srubio@abiquo.com> - 1.7.0-3.rel1.1.1
