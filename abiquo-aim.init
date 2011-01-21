@@ -13,11 +13,16 @@ RETVAL=0
 start()
 {
 
+  if ! [ -f /opt/vm_repository/.abiquo_repository ]; then
+	  echo -e "\n/opt/vm_repository/.abiquo_repository file not found."
+	  echo -e "Make sure the Abiquo NFS Repository is mounted in /opt/vm_repository\n"
+	  exit 1
+  fi
+
   status libvirtd
   RETVAL=$?
 
   if [ $RETVAL -ne 0 ]; then
-    echo -n $"Starting libvirtd daemon: "
     /etc/init.d/libvirtd start
   fi
   
@@ -45,12 +50,8 @@ case "$1" in
     stop
     start
     ;;
-  status)
-    status openwsmand
-    RETVAL=$?
-    ;;
   *)
-    echo $"Usage: $0 {start|stop|restart|status}"
+    echo $"Usage: $0 {start|stop|restart}"
     exit 1
 esac
 exit $RETVAL
