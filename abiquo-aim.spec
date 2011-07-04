@@ -1,16 +1,18 @@
 Name:           abiquo-aim
 BuildRequires:  hiredis gcc-c++ thrift-cpp-devel boost-devel curl-devel libvirt-devel 
-Requires:	libvirt hiredis boost
-Version:        1.7.5
-Release:        1.rel1.1.6
+Requires:	libvirt hiredis boost ruby
+Version:        1.8
+Release:        2.aimrel1.3.2
 Url:            http://www.abiquo.com/
 License:        BSD(or similar)
 Group:          System/Management
 Summary:        Abiquo Cloud Node Agent
-Source:         %{name}-%{version}.tar.bz2
+Source:         http://mirror.abiquo.com/sources/%{name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Source1:	abiquo-aim.ini
 Source2:	abiquo-aim.init
+# Remove this stuff for the next version
+Source3:        generate-network-files.rb
 
 %description
 Summary:        Abiquo Cloud Node Agent
@@ -29,9 +31,11 @@ CPATH="/usr/include/thrift:/usr/include/hiredis" make
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_sbindir}/
 mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/rc.d/init.d
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/abiquo-aim/
 cp $RPM_BUILD_DIR/%{name}-%{version}/src/aim $RPM_BUILD_ROOT/%{_sbindir}/abiquo-aim
 cp %{SOURCE1} $RPM_BUILD_ROOT/%{_sysconfdir}/abiquo-aim.ini
 cp %{SOURCE2} $RPM_BUILD_ROOT/%{_sysconfdir}/rc.d/init.d/abiquo-aim
+cp %{SOURCE3} $RPM_BUILD_ROOT/%{_datadir}/abiquo-aim/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -41,6 +45,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/abiquo-aim
 %config(noreplace) %{_sysconfdir}/abiquo-aim.ini
 %{_sysconfdir}/rc.d/init.d/abiquo-aim
+# Remove this stuff for the next version
+%{_datadir}/abiquo-aim/generate-network-files.rb
 
 %post
 /sbin/chkconfig --add abiquo-aim
@@ -51,7 +57,23 @@ if ! [ -d /opt/vm_repository ]; then
 	mkdir -p /opt/vm_repository
 fi
 
+# Remove this stuff for the next version
+if ! [ -f /etc/sysconfig/network-scripts/.abiquo_bridge_fix ]; then
+	/usr/bin/ruby %{_datadir}/abiquo-aim/generate-network-files.rb
+	touch /etc/sysconfig/network-scripts/.abiquo_bridge_fix
+fi
+
 %changelog
+* Mon Jul 04 2011 Sergio Rubio <rubiojr@frameos.org> - 1.8-2.aimrel1.3.2
+- use ruby binary full path
+
+* Mon Jun 27 2011 Sergio Rubio <srubio@abiquo.com> - 1.8-1.aimrel1.3.2
+- added generate-network-files script
+- bumped version to 1.3.2 final
+
+* Wed May 25 2011 Sergio Rubio <srubio@abiquo.com> - 1.8-1.0dev.aimrel1.2
+- updated to 1.8
+
 * Thu Mar 17 2011 Sergio Rubio <srubio@abiquo.com> - 1.7.5-1.rel1.1.6
 - upstream update 
 
