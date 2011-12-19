@@ -2,7 +2,7 @@ Name:           abiquo-aim
 BuildRequires:  hiredis gcc-c++ thrift-cpp-devel boost-devel curl-devel libvirt-devel 
 Requires:	libvirt hiredis boost ruby
 Version:        1.8
-Release:        2.aimrel1.3.2
+Release:        4.aimrel1.3.2
 Url:            http://www.abiquo.com/
 License:        BSD(or similar)
 Group:          System/Management
@@ -13,6 +13,9 @@ Source1:	abiquo-aim.ini
 Source2:	abiquo-aim.init
 # Remove this stuff for the next version
 Source3:        generate-network-files.rb
+%if 0%{?rhel} == 6
+BuildRequires:  libuuid-devel
+%endif
 
 %description
 Summary:        Abiquo Cloud Node Agent
@@ -64,6 +67,12 @@ if ! [ -f /etc/sysconfig/network-scripts/.abiquo_bridge_fix ]; then
 fi
 
 %changelog
+* Wed Jul 13 2011 Sergio Rubio <srubio@abiquo.com> - 1.8-4.aimrel1.3.2
+- updated generate-network-files.rb script
+
+* Thu Jul 07 2011 Sergio Rubio <srubio@abiquo.com> - 1.8-3.aimrel1.3.2
+- fix rhel6 build
+
 * Mon Jul 04 2011 Sergio Rubio <rubiojr@frameos.org> - 1.8-2.aimrel1.3.2
 - use ruby binary full path
 

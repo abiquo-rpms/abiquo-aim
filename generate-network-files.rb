@@ -9,11 +9,11 @@ def bridges_to_persist()
     stdin, stdout, stderr = Open3.popen3("brctl show")
 
     stdout.readlines.each do |line|
-        fields = line.scan(/abiquo_\d/)
+        fields = line.scan(/abiquo_\d+/)
 
         unless fields.empty?
             bridge_name = fields[0]
-            bridges[bridge_name] = {:bridge => bridge_name, :tag => bridge_name.scan(/\d/), :macs => []}
+            bridges[bridge_name] = {:bridge => bridge_name, :tag => bridge_name.scan(/\d+/), :macs => []}
         end
     end
 
