@@ -1,8 +1,8 @@
 Name:           abiquo-aim
 BuildRequires:  hiredis gcc-c++ thrift-cpp-devel boost-devel curl-devel libvirt-devel 
-Requires:	libvirt hiredis boost ruby
+Requires:	libvirt hiredis boost
 Version:        1.8
-Release:        4.aimrel1.3.2
+Release:        5.aimrel1.4%{?dist}
 Url:            http://www.abiquo.com/
 License:        BSD(or similar)
 Group:          System/Management
@@ -12,7 +12,6 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Source1:	abiquo-aim.ini
 Source2:	abiquo-aim.init
 # Remove this stuff for the next version
-Source3:        generate-network-files.rb
 %if 0%{?rhel} == 6
 BuildRequires:  libuuid-devel
 %endif
@@ -38,7 +37,6 @@ mkdir -p $RPM_BUILD_ROOT/%{_datadir}/abiquo-aim/
 cp $RPM_BUILD_DIR/%{name}-%{version}/src/aim $RPM_BUILD_ROOT/%{_sbindir}/abiquo-aim
 cp %{SOURCE1} $RPM_BUILD_ROOT/%{_sysconfdir}/abiquo-aim.ini
 cp %{SOURCE2} $RPM_BUILD_ROOT/%{_sysconfdir}/rc.d/init.d/abiquo-aim
-cp %{SOURCE3} $RPM_BUILD_ROOT/%{_datadir}/abiquo-aim/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -49,7 +47,6 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/abiquo-aim.ini
 %{_sysconfdir}/rc.d/init.d/abiquo-aim
 # Remove this stuff for the next version
-%{_datadir}/abiquo-aim/generate-network-files.rb
 
 %post
 /sbin/chkconfig --add abiquo-aim
@@ -60,13 +57,11 @@ if ! [ -d /opt/vm_repository ]; then
 	mkdir -p /opt/vm_repository
 fi
 
-# Remove this stuff for the next version
-if ! [ -f /etc/sysconfig/network-scripts/.abiquo_bridge_fix ]; then
-	/usr/bin/ruby %{_datadir}/abiquo-aim/generate-network-files.rb
-	touch /etc/sysconfig/network-scripts/.abiquo_bridge_fix
-fi
-
 %changelog
+* Mon Dec 19 2011 Sergio Rubio <rubiojr@frameos.org> - 1.8-5.aimrel1.4
+- upstream version 1.4
+- remove ruby script to generate network iface configs
+
 * Wed Jul 13 2011 Sergio Rubio <srubio@abiquo.com> - 1.8-4.aimrel1.3.2
 - updated generate-network-files.rb script
 
