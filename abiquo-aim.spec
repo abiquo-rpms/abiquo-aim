@@ -1,13 +1,13 @@
 Name:           abiquo-aim
 BuildRequires:  hiredis gcc-c++ thrift-cpp-devel boost-devel curl-devel libvirt-devel 
 Requires:	libvirt hiredis boost
-Version:        1.8
-Release:        5.aimrel1.4%{?dist}
+Version:        2.0rel1.4
+Release:        1%{?dist}
 Url:            http://www.abiquo.com/
 License:        BSD(or similar)
 Group:          System/Management
 Summary:        Abiquo Cloud Node Agent
-Source:         http://mirror.abiquo.com/sources/%{name}-%{version}.tar.bz2
+Source:         https://github.com/downloads/abiquo/aim/abiquo-aim-%{version}.tar.bz2 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Source1:	abiquo-aim.ini
 Source2:	abiquo-aim.init
@@ -58,6 +58,12 @@ if ! [ -d /opt/vm_repository ]; then
 fi
 
 %changelog
+* Wed Jan 11 2012 Sergio Rubio <rubiojr@frameos.org> - 2.0rel1.4-1
+- bumped version
+
+* Mon Dec 19 2011 Sergio Rubio <srubio@abiquo.com> - 1.8rel1.4-6
+- new versioning scheme
+
 * Mon Dec 19 2011 Sergio Rubio <rubiojr@frameos.org> - 1.8-5.aimrel1.4
 - upstream version 1.4
 - remove ruby script to generate network iface configs
